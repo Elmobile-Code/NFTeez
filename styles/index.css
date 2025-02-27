@@ -1,0 +1,51 @@
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  font-family: sans-serif;
+}
+
+.chatWindow {
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 400px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.messageBubble {
+  clear: both; 
+  margin: 5px 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: inline-block;
+  max-width: 80%;
+}
+
+.userBubble {
+  background-color: #e0f7fa;
+  float: right;
+  text-align: right;
+}
+
+.botBubble {
+  background-color: #f1f1f1;
+  float: left;
+  text-align: left;
+}
+
+.inputArea {
+  display: flex;
+}
+
+.input {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.sendButton {
+  padding: 10px 20px;
+  margin-left: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
