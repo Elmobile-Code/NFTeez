@@ -22,14 +22,14 @@ async function getFeaturedCollections(): Promise<Collection[]> {
     })) || [];
 
   } catch (error) {
-    console.error("Error fetching collections:", error);
-    return [{ title: "Failed to load collections", url: "" }];
+    console.error(" Error fetching collections:", error);
+    return [{ title: " Failed to load collections", url: "" }];
   }
 }
 
 export default function Home() {
   const [messages, setMessages] = useState([
-    { role: "bot", text: "Hello! How can I help you today?" },
+    { role: "bot", text: " Hello! How can I help you today?" },
   ]);
   //user input
   const [inputValue, setInputValue] = useState("");
@@ -43,7 +43,7 @@ export default function Home() {
     setInputValue("");
     setIsBotTyping(true);
 
-    let botResponse = "I'm not sure how to answer that.";
+    let botResponse = " I'm not sure how to answer that.";
 
     // Check if user asks about "top collections"
     if (userMessage.toLowerCase().includes("top collection") || userMessage.toLowerCase().includes("top feature")) {
@@ -99,4 +99,4 @@ export default function Home() {
       </div>
     </div>
   );
-}
+} 
