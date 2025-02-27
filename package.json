@@ -1,0 +1,23 @@
+{
+  "name": "nfteez",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elmobile-Code/NFTeez.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Elmobile-Code/NFTeez/issues"
+  },
+  "homepage": "https://github.com/Elmobile-Code/NFTeez#readme"
+}
