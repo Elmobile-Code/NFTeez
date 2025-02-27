@@ -37,36 +37,40 @@ export default function Home() {
 
   async function handleSend() {
     if (!inputValue.trim() || isBotTyping) return;
-
+  
     const userMessage = inputValue.trim();
     setMessages((prev) => [...prev, { role: "user", text: userMessage }]);
     setInputValue("");
     setIsBotTyping(true);
-
-    let botResponse = " I'm not sure how to answer that.";
-
-    // Check if user asks about "top collections"
+  
+    let botResponse = "I'm not sure how to answer that.";
+  
+    // Call the backend to run the Bash script
     if (userMessage.toLowerCase().includes("top collection") || userMessage.toLowerCase().includes("top feature")) {
-      const collections = await getFeaturedCollections();
-
-      botResponse =
-        collections.length > 0
-          ? `Here are the top collections:\n${collections
-              .slice(0, 5) // Display only top 5 collections
-              .map(
-                (col, index) => 
-                  `${index + 1}. ${col.title} - <a href="${col.url}" target="_blank">View Collection</a>`
-              )
-              .join("<br>")}`
-          : "I couldn't fetch the top collections at the moment.";
+      try {
+        const response = await fetch("http://localhost:5001/run-bash", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message: userMessage }),
+        });
+  
+        const data = await response.json();
+        botResponse = data.botResponse || "I couldn't fetch the top collections at the moment.";
+      } catch (error) {
+        console.error("Error contacting backend:", error);
+        botResponse = "There was an error fetching the data.";
+      }
     }
-
+  
     // Bot responds
     setTimeout(() => {
       setMessages((prev) => [...prev, { role: "bot", text: botResponse }]);
       setIsBotTyping(false);
     }, 1000);
   }
+  
 
   return (
     <div className="container">
