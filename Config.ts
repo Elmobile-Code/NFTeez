@@ -24,6 +24,5 @@ export const wallet = await nearConnection.account(walletId);
 export const parasContract = new nearAPI.Contract(wallet, parasConfig.contractName, {
   changeMethods: ["nft_create_series"],
   // TODO make sure this works
-  viewMethods: ["nft_get_series_by_id"],
-  useLocalViewExecution: true
+  viewMethods: ["nft_get_series_by_id"]
 });

@@ -36,41 +36,53 @@ else
     exit 1
 fi
 
+
 # Step 5: Connecting NEAR Wallet
 echo "🔑 Logging into NEAR Wallet..."
-nearai login
+nearai login &
+
+
 echo "⚠️ Please complete wallet authentication in the browser."
+
 
 # Step 6: Create an AI Agent
 echo "🤖 Creating NEAR AI Agent..."
 agent_name="my_first_agent"
 agent_creation_output=$(nearai agent create --name "$agent_name")
 
-echo $agent_creation_output
-# Step 7: Parse the agent path from the output using a regular expression
-# This regex will capture the full path starting from '/Users/...'
-agent_path=$(echo "$agent_creation_output" | awk -F'New AI Agent created at: ' '{print $2}' | tr -d '[:space:]')
 
-# Debugging: Print the agent path
-echo "Detected Agent Path: $agent_path"
 
-# Check if the agent path exists
-if [ -d "$agent_path" ]; then
-    echo "📂 AI Agent created at: $agent_path"
-    cd "$agent_path"
-else
-    echo "❌ Failed to create AI Agent. Directory not found: $agent_path"
-    exit 1
-fi
 
-# # Step 8: List agent files
-# echo "📄 Listing agent files..."
-# ls -la
 
-# # Step 9: Open agent.py for editing
-# echo "📝 Opening agent.py for editing..."
-# nano agent.py
+# # Step 7: Parse the agent path from the output using a regular expression
+# # This regex will capture the full path starting from '/Users/...'
+# #agent_path=$(echo "$agent_creation_output" | awk -F'New AI Agent created at: ' '{print $2}' | cut -d'/' -f1-9 | tr -d '[:space:]')
+agent_path="/Users/vikrampidaparthi/.nearai/registry/9825c75a72b230aefe1468f7e21d6e857563b584df3618c11f11f0f80ec8f302/my_first_agent/0.0.1"
 
-# Step 10: Run the AI Agent interactively
-echo "🚀 Starting interactive session with your AI agent..."
+
+# # Debugging: Print the agent path
+# echo "Detected Agent Path: $agent_path"
+
+
+
+# # Check if the agent path exists
+# if [ -d "$agent_path" ]; then
+#     echo "📂 AI Agent created at: $agent_path"
+#     cd "$agent_path"
+# else
+#     echo "❌ Failed to create AI Agent. Directory not found: $agent_path"
+#     exit 1
+# # fi
+
+
+# # # # Step 8: List agent files
+# # # echo "📄 Listing agent files..."
+# # # ls -la
+
+# # # # Step 9: Open agent.py for editing
+# # # echo "📝 Opening agent.py for editing..."
+# # # nano agent.py
+
+# # Step 10: Run the AI Agent interactively
+# echo "🚀 Starting interactive session with your AI agent..."
 nearai agent interactive "$agent_path" --local

@@ -1,38 +1,71 @@
 const express = require("express");
 const { exec } = require("child_process");
-
+const bodyParser = require("body-parser");
 const app = express();
 const port = 5001;
 
-// Middleware to parse JSON body
-app.use(express.json());
+// Middleware
+app.use(bodyParser.json()); // Parse JSON request body
 
-// Route to handle the request and run the Bash script
-app.post("/run-bash", (req, res) => {
-  const { message } = req.body;
+// Step 1: Run the backend setup script to deploy the agent
+app.post("/deploy-agent", (req, res) => {
+  console.log("🛠 Running setup to deploy the agent...");
+  
+  // Run the Bash script to deploy the agent
+  exec("./pages/nearai.sh", (error, stdout, stderr) => {
+    if (error) {
+      console.error(`❌ exec error: ${error.message}`);
+      return res.status(500).json({ message: "Error deploying the agent." });
+    }
 
-  // If the message contains a trigger, run the bash script
-  if (message.toLowerCase().includes("top collection") || message.toLowerCase().includes("top feature")) {
-    // Run the Bash script (make sure the script is executable and correctly set up)
-    exec("./pages/nearai.sh", (error, stdout, stderr) => {
-      if (error) {
-        console.error(`exec error: ${error}`);
-        return res.status(500).send("Error running the script");
-      }
-      if (stderr) {
-        console.error(`stderr: ${stderr}`);
-        return res.status(500).send("Error in script execution");
-      }
+    if (stderr) {
+      console.error(`⚠️ stderr: ${stderr}`);
+      return res.status(500).json({ message: "Error in the agent deployment script." });
+    }
 
-      // Send the script's output as the bot's response
-      res.json({ botResponse: stdout });
-    });
-  } else {
-    // Default bot response
-    res.json({ botResponse: "I'm not sure how to answer that." });
-  }
+    console.log(`✅ Agent Deployment Output: ${stdout}`);
+    res.status(200).json({ message: "Agent deployed successfully!" });
+  });
 });
+
+// Step 2: Handle user messages and send them to the agent
+app.post("/message", (req, res) => {
+  const userMessage = req.body.message;
+  
+  // Send the message to the deployed agent for processing (assuming you have the mechanism set up to interact with the AI agent)
+  console.log(`🧠 Sending message to the AI agent: ${userMessage}`);
+  
+  // Simulate agent response (replace with actual interaction with the agent)
+  const agentResponse = `AI Response to: ${userMessage}`;
+  
+  res.status(200).json({ botResponse: agentResponse });
+});
+
+app.use(express.json()); // Middleware to parse JSON request body
+
+// Path to the shell script
+const scriptPath = "/Users/vikrampidaparthi/Documents/BAF/NFTeez/pages/nearai.sh"; // Update with the correct path to your shell script
+const { spawn } = require("child_process");
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
+
+  // Use spawn instead of exec
+  const process = spawn("bash", [scriptPath]);
+
+  process.stdout.on("data", (data) => {
+    console.log(`✅ Script Output: ${data.toString()}`);
+  });
+
+  process.stderr.on("data", (data) => {
+    console.error(`⚠️ Script Error: ${data.toString()}`);
+  });
+
+  process.on("close", (code) => {
+    console.log(`🔚 Script process exited with code ${code}`);
+  });
+
+  process.on("error", (err) => {
+    console.error(`❌ Script execution failed: ${err.message}`);
+  });
 });
